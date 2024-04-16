@@ -1,9 +1,14 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
+import { useSelector, useDispatch } from "react-redux";
+import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
 
 export default function Password() {
     const passwordElement = useRef();
     const showElement = useRef();
+    const [formData, setFormData] = useState({});
+    const { token } = useSelector((state) => state.admin);
+    const dispatch = useDispatch();
 
     const handleShow = () => {
         if (passwordElement.current.type === "password") {
@@ -14,6 +19,38 @@ export default function Password() {
             showElement.current.value = 'Show';
         }
     }
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.id]: e.target.value });
+    }
+
+    const handlePassword = async (e) => {
+        e.preventDefault();
+        try {
+            dispatch(buttonStart());
+            const response = await fetch("/api/v1/users/current/password", {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token.token}`
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (!data.errors) {
+                dispatch(buttonFinish());
+                console.log(data);
+            } else {
+                console.log(data);
+                dispatch(buttonFailed(data.errors))
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     return (
         <AdminLayout>
             <div className="flex items-center justify-center min-h-screen text-white bg-slate-900">
@@ -25,11 +62,11 @@ export default function Password() {
                     </div>
                     <form className="flex flex-col mx-auto">
                         <label htmlFor="old_password" className="text-white">Password Lama</label>
-                        <input type="password" name="old_password" id="old_password" placeholder="Masukan username disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
+                        <input onChange={handleChange} type="password" name="old_password" id="old_password" placeholder="Masukan username disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
                         <label htmlFor="new_password" className="text-white">Password Baru</label>
-                        <input type="password" name="new_password" id="new_password" placeholder="Masukan password disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" ref={passwordElement} />
+                        <input onChange={handleChange} type="password" name="new_password" id="new_password" placeholder="Masukan password disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" ref={passwordElement} />
                         <input type="button" name="show" id="show" className="self-end mt-0 mb-6 cursor-pointer" value="Show" ref={showElement} onClick={handleShow} />
-                        <button className="w-full p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white">Ubah</button>
+                        <button onClick={handlePassword} className="w-full p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white">Ubah</button>
                     </form>
                     <div className="flex justify-center gap-1 text-sm">
                     </div>
