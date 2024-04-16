@@ -14,6 +14,10 @@ import Profile from "./pages/admin/Profile";
 import Password from "./pages/admin/Password";
 import Report from "./pages/admin/Report";
 import Pemweb from "./pages/public/Pemweb";
+import ScheduleAdd from "./pages/admin/ScheduleAdd";
+import KapsterAdd from "./pages/admin/KapsterAdd";
+import LoginAdmin from "./pages/public/LoginAdmin";
+import AdminPrivateRoute from "./components/AdminPrivateRoute";
 
 
 export default function App() {
@@ -26,16 +30,21 @@ export default function App() {
         <Route path="/booking" element={<Booking />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/admin/login" element={<LoginAdmin />} />
         <Route path="/register" element={<Register />} />
         <Route path="/pemweb" element={<Pemweb />} />
 
-        <Route path="/admin/orders" element={<Order />} />
-        <Route path="/admin/schedules" element={<Schedule />} />
-        <Route path="/admin/categories" element={<Category />} />
-        <Route path="/admin/kapsters" element={<Kapster />} />
-        <Route path="/admin/profiles" element={<Profile />} />
-        <Route path="/admin/passwords" element={<Password />} />
-        <Route path="/admin/reports" element={<Report />} />
+        <Route element={<AdminPrivateRoute />}>
+          <Route path="/admin/orders" element={<Order />} />
+          <Route path="/admin/schedules" element={<Schedule />} />
+          <Route path="/admin/schedules/add" element={<ScheduleAdd />} />
+          <Route path="/admin/categories" element={<Category />} />
+          <Route path="/admin/kapsters" element={<Kapster />} />
+          <Route path="/admin/kapsters/add" element={<KapsterAdd />} />
+          <Route path="/admin/profiles" element={<Profile />} />
+          <Route path="/admin/passwords" element={<Password />} />
+          <Route path="/admin/reports" element={<Report />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

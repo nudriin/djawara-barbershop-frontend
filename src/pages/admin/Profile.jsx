@@ -26,9 +26,9 @@ export default function Profile() {
                         </div>
                         <div className="col-span-6">
                             <div className="max-w-sm overflow-hidden rounded-xl">
-                        <img src="https://placehold.co/250x340" onClick={() => fileRef.current.click()} className="object-cover object-top w-full h-full cursor-pointer" />
+                                <img src="https://placehold.co/250x340" onClick={() => fileRef.current.click()} className="object-cover object-top w-full h-full cursor-pointer" />
                             </div>
-                            <input type="file" ref={fileRef} hidden/>
+                            <input type="file" ref={fileRef} hidden />
                         </div>
                     </form>
                 </div>

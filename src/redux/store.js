@@ -4,22 +4,23 @@ import { version } from "react";
 import persistReducer from "redux-persist/es/persistReducer";
 import persistStore from "redux-persist/es/persistStore";
 import storage from "redux-persist/lib/storage";
+import adminSlice from "./admin/adminSlice";
 
 
-// const rootReducer = combineReducers({
+const rootReducer = combineReducers({
+    admin: adminSlice
+});
 
-// });
+const persistConfig = {
+    key: 'login',
+    version: 1,
+    storage
+}
 
-// const persistConfig = {
-//     key: 'login',
-//     version: 1,
-//     storage
-// }
-
-// const persist = persistReducer(persistConfig, rootReducer);
+const persist = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-    reducer : {},
+    reducer : persist,
     middleware : (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false
     })
