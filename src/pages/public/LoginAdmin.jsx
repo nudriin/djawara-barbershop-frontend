@@ -8,7 +8,7 @@ export default function LoginAdmin() {
     const passwordElement = useRef();
     const showElement = useRef();
     const [formData, setFormData] =  useState({});
-    const dispacth = useDispatch();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleShow = () => {
@@ -21,7 +21,7 @@ export default function LoginAdmin() {
         }
     }
 
-    const handleChenge = (e) => {
+    const handleChange = (e) => {
         setFormData({
             ...formData, 
             [e.target.id] : e.target.value
@@ -32,7 +32,7 @@ export default function LoginAdmin() {
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
-            dispacth(signInStart());
+            dispatch(signInStart());
             const response = await fetch("/api/v1/admins/login", {
                 method : "POST",
                 headers : {
@@ -44,11 +44,11 @@ export default function LoginAdmin() {
             const data = await response.json();
             if(data.errors) {
                 console.log(data.errors);
-                dispacth(signInFailed(data.errors))
+                dispatch(signInFailed(data.errors))
                 throw new Error(data.errors);
             }
             if(!data.errors){
-                dispacth(signInSuccess(data.data))
+                dispatch(signInSuccess(data.data))
                 const response = await fetch("/api/v1/users/current", {
                     method : "GET",
                     headers : {
@@ -60,7 +60,7 @@ export default function LoginAdmin() {
                 const curAdmin = await response.json();
                 console.log(curAdmin);
                 console.log(data);
-                dispacth(getUserSuccess(curAdmin));
+                dispatch(getUserSuccess(curAdmin));
             }
             navigate("/admin/profiles");
         } catch (e) {
@@ -80,9 +80,9 @@ export default function LoginAdmin() {
                     </div>
                     <form className="flex flex-col mx-auto">
                         <label htmlFor="username" className="text-white">Username</label>
-                        <input type="text" name="username" id="username" onChange={handleChenge} placeholder="Masukan username disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
+                        <input type="text" name="username" id="username" onChange={handleChange} placeholder="Masukan username disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
                         <label htmlFor="password" className="text-white">Password</label>
-                        <input type="password" name="password" id="password" onChange={handleChenge} placeholder="Masukan password disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" ref={passwordElement} />
+                        <input type="password" name="password" id="password" onChange={handleChange} placeholder="Masukan password disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" ref={passwordElement} />
                         <input type="button" name="show" id="show" className="self-end mt-0 mb-6 cursor-pointer" value="Show" ref={showElement} onClick={handleShow} />
                         <button className="w-full p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white" onClick={handleLogin}>Login</button>
                     </form>

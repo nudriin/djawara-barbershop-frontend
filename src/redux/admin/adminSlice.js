@@ -58,7 +58,7 @@ const adminSlice = createSlice({
         updateUserSuccess: (state, action) => {
             state.loading = false;
             state.errors = false;
-            state.curAdmin = action.payload;
+            state.curAdmin = action?.payload;
         },
 
         updateUserFailed: (state, action) => {
