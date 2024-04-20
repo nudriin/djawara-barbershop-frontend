@@ -18,7 +18,7 @@ import ScheduleAdd from "./pages/admin/ScheduleAdd";
 import KapsterAdd from "./pages/admin/KapsterAdd";
 import LoginAdmin from "./pages/public/LoginAdmin";
 import AdminPrivateRoute from "./components/AdminPrivateRoute";
-
+import AdminSignRoute from "./components/AdminSignRoute";
 
 export default function App() {
   return (
@@ -29,10 +29,13 @@ export default function App() {
         <Route path="/pricelist" element={<Pricelist />} />
         <Route path="/booking" element={<Booking />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin/login" element={<LoginAdmin />} />
         <Route path="/register" element={<Register />} />
         <Route path="/pemweb" element={<Pemweb />} />
+
+        <Route element={<AdminSignRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin/login" element={<LoginAdmin />} />
+        </Route>
 
         <Route element={<AdminPrivateRoute />}>
           <Route path="/admin/orders" element={<Order />} />

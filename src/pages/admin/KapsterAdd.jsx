@@ -1,9 +1,66 @@
-import { useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
+import supabase from "../../supabase";
+import { useDispatch, useSelector } from "react-redux";
+import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
 
 export default function KapsterAdd() {
     const fileRef = useRef(null);
+    const [image, setImage] = useState(undefined);
+    const [imgUrl, setImgUrl] = useState(null);
+    const [formData, setFormData] = useState({});
+    const {loading, token} = useSelector((state) => state.admin);
+    const dispatch = useDispatch();
+
+    const uploadImage = useCallback(async (image) => {
+        dispatch(buttonStart());
+        const fileName = new Date().getTime() + image.name;
+        const {data, error} = await supabase.storage.from('nudriin').upload(`${fileName}`, image);
+        if(!error) {
+            console.log(data);
+            dispatch(buttonFinish());
+            return data;
+        } else {
+            console.log(error);
+            dispatch(buttonFailed(error))
+        }
+    }, [dispatch]); 
+
+    const getImage = useCallback((path) => {
+        const {data}= supabase.storage.from('nudriin').getPublicUrl(path);
+        setImgUrl(data.publicUrl)
+        setFormData((prevFormData) => ({...prevFormData, profile_pic : data.publicUrl}))
+    }, [setFormData]) 
+
+    useEffect(() => {
+        if(image) {
+            uploadImage(image).then((response) => {
+                getImage(response.path)
+            });
+        }
+    }, [image, getImage, uploadImage])
+
     
+
+    const handleChange = (e) => {
+        setFormData({...formData, [e.target.id] : e.target.value});
+        console.log(formData);
+    }
+
+    const handleUpload = async (e) => {
+        e.preventDefault();
+        const response = await fetch("/api/v1/kapsters", {
+            method : "POST",
+            headers : {
+                'Content-Type' : 'application/json',
+                'Authorization' : `Bearer ${token.token}`
+            },
+            body : JSON.stringify(formData)
+        });
+
+        const data = response.json();
+        console.log(data);
+    }
 
     return (
         <AdminLayout>
@@ -16,16 +73,16 @@ export default function KapsterAdd() {
                     <form className="grid grid-cols-12 items-center justify-center gap-4">
                         <div className="col-span-6">
                             <label htmlFor="name" className="text-white">Nama</label>
-                            <input type="password" name="name" id="name" placeholder="Masukan username disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
+                            <input onChange={handleChange} type="text" name="name" id="name" placeholder="Masukan nama disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
                             <label htmlFor="phone" className="text-white">Nomor Telepon</label>
-                            <input type="text" name="phone" id="phone" placeholder="Masukan password disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
-                            <button className="w-full p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white">Tambah</button>
+                            <input onChange={handleChange} type="number" name="phone" id="phone" placeholder="Masukan nomor telepon disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
+                            <button onClick={handleUpload} disabled={loading} className="w-full p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white">Tambah</button>
                         </div>
                         <div className="col-span-6">
-                            <div className="max-w-sm overflow-hidden rounded-xl">
-                                <img src="https://placehold.co/200x200" onClick={() => fileRef.current.click()} className="object-cover object-top w-full h-full cursor-pointer" />
-                            </div>
-                            <input type="file" ref={fileRef} hidden />
+                                <div className="max-w-sm overflow-hidden rounded-xl">
+                                    {fileRef && <img src={imgUrl ? imgUrl : "https://placehold.co/200x200"} onClick={() => fileRef.current.click()} className="object-cover object-top w-full h-full cursor-pointer" />}
+                                </div>
+                                <input type="file" ref={fileRef} hidden onChange={(e)=>setImage(e.target.files[0])} />
                         </div>
                     </form>
                     <div className="flex justify-center gap-1 text-sm">

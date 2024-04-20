@@ -1,10 +1,14 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import PublicLayout from "../../components/PublicLayout";
+import { useDispatch } from "react-redux";
+import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
 
 export default function Register() {
     const passwordElement = useRef();
     const showElement = useRef();
+    const [formData, setFormData] = useState({});
+    const dispatch = useDispatch();
 
     const handleShow = () => {
         if (passwordElement.current.type === "password") {
@@ -15,9 +19,40 @@ export default function Register() {
             showElement.current.value = 'Show';
         }
     }
+
+    const handleChange = (e) => {
+        setFormData({...formData, [e.target.id] : e.target.value});
+        console.log(formData);
+    }
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        try {
+            dispatch(buttonStart());
+            const response = await fetch("/api/v1/users", {
+                method : "POST",
+                headers : {
+                    'Content-Type' : 'application/json'
+                }, 
+                body : JSON.stringify(formData)
+            });
+    
+            const data = await response.json();
+            console.log(data);
+            if(!data.errors) {
+                console.log(data);
+                dispatch(buttonFinish());
+            } else {
+                console.log(data.errors);
+                dispatch(buttonFailed(data.errors));
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     return (
         <PublicLayout>
-
             <section className="flex items-center justify-center min-h-screen py-24 text-white bg-slate-900">
                 <div className="w-9/12 p-6 space-y-5 border rounded-xl border-lime">
                     <div className="flex flex-col items-center justify-center gap-2">
@@ -28,24 +63,24 @@ export default function Register() {
                     <form className="grid grid-cols-12 gap-4">
                         <div className="col-span-6">
                             <label htmlFor="email" className="text-white">Email</label>
-                            <input type="text" name="email" id="email" placeholder="Masukan email disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
+                            <input onChange={handleChange} type="text" name="email" id="email" placeholder="Masukan email disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
                             <label htmlFor="name" className="text-white">Name</label>
-                            <input type="text" name="name" id="name" placeholder="Masukan nama disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
+                            <input onChange={handleChange} type="text" name="name" id="name" placeholder="Masukan nama disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
                             <label htmlFor="phone" className="text-white">Phone</label>
-                            <input type="text" name="phone" id="phone" placeholder="Masukan nomor telepon disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
+                            <input onChange={handleChange} type="text" name="phone" id="phone" placeholder="Masukan nomor telepon disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
                         </div>
                         <div className="flex flex-col col-span-6">
                             <label htmlFor="username" className="text-white">Username</label>
-                            <input type="text" name="username" id="username" placeholder="Masukan username disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
+                            <input onChange={handleChange} type="text" name="username" id="username" placeholder="Masukan username disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
                             <label htmlFor="password" className="text-white">Password</label>
                             <div className="flex w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0">
-                                <input type="password" name="password" id="password" className="w-full bg-transparent focus:outline-0" placeholder="Masukan password disini..." ref={passwordElement} />
+                                <input onChange={handleChange} type="password" name="password" id="password" className="w-full bg-transparent focus:outline-0" placeholder="Masukan password disini..." ref={passwordElement} />
                                 <input type="button" name="show" id="show" className="self-end cursor-pointer" value="Show" ref={showElement} onClick={handleShow} />
                             </div>
                             <label htmlFor="address" className="text-white">Alamat</label>
-                            <input type="text" name="address" id="address" placeholder="Masukan nomor alamat disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
+                            <input onChange={handleChange} type="text" name="address" id="address" placeholder="Masukan nomor alamat disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
                         </div>
-                        <button className="w-full col-span-12 p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white">Register</button>
+                        <button onClick={handleRegister} className="w-full col-span-12 p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white">Register</button>
                     </form>
                     <div className="flex justify-center gap-1 text-sm">
                         <p className="">Sudah punya akun?</p>
