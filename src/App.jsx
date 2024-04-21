@@ -19,6 +19,7 @@ import KapsterAdd from "./pages/admin/KapsterAdd";
 import LoginAdmin from "./pages/public/LoginAdmin";
 import AdminPrivateRoute from "./components/AdminPrivateRoute";
 import AdminSignRoute from "./components/AdminSignRoute";
+import KapsterUpdate from "./pages/admin/KapsterUpdate";
 
 export default function App() {
   return (
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="/admin/categories" element={<Category />} />
           <Route path="/admin/kapsters" element={<Kapster />} />
           <Route path="/admin/kapsters/add" element={<KapsterAdd />} />
+          <Route path="/admin/kapsters/:id" element={<KapsterUpdate />} />
           <Route path="/admin/profiles" element={<Profile />} />
           <Route path="/admin/passwords" element={<Password />} />
           <Route path="/admin/reports" element={<Report />} />

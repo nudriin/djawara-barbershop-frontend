@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 export default function Kapster() {
     const [kapsters, setKapsters] = useState([]);
 
-
-
     useEffect(() => {
         const getKapsters = async () => {
             try {
@@ -26,6 +24,10 @@ export default function Kapster() {
         getKapsters();
     }, []);
 
+    const handleClick = (id) => {
+        window.location.href = `/admin/kapsters/${id}`;
+    }
+
     return (
         <AdminLayout>
             <div className="flex flex-col items-center justify-center w-9/12 gap-5 mx-auto">
@@ -36,15 +38,15 @@ export default function Kapster() {
                     </NavLink>
                 </div>
                 <div className="flex flex-wrap items-center justify-center gap-10 pb-10">
-                    {kapsters.map((value, index) => (
+                    {
+                    kapsters !== undefined && kapsters.map((value, index) => (
                         <div className="flex flex-col items-center justify-center gap-2" key={index}>
                             <div className="max-w-sm overflow-hidden text-center rounded-full hover:bg-purple bg-lime text-slate-900 hover:text-white"  >
-                                <img src={value.profile_pic} className="object-cover object-top w-[250px] h-[250px]" />
+                                <img src={value.profile_pic} className="object-cover cursor-pointer object-center w-[250px] h-[250px]" onClick={() => handleClick(value.id)} />
                             </div>
                             <p className="text-white">{value.name}</p>
                         </div>
                     ))}
-
                 </div>
             </div>
         </AdminLayout>
