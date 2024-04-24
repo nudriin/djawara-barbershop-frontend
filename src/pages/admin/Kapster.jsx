@@ -1,13 +1,17 @@
 import { NavLink } from "react-router-dom";
 import AdminLayout from "../../components/AdminLayout";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
 
 export default function Kapster() {
     const [kapsters, setKapsters] = useState([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const getKapsters = async () => {
             try {
+                dispatch(buttonStart());
                 const response = await fetch("/api/v1/kapsters", {
                     method: "GET",
                     headers: {
@@ -16,17 +20,21 @@ export default function Kapster() {
                 });
 
                 const data = await response.json();
-                setKapsters(data.data);
+                if (!data.errors) {
+                    console.log(data);
+                    setKapsters(data.data);
+                    dispatch(buttonFinish());
+                } else {
+                    dispatch(buttonFailed(data.errors));
+                    throw new Error(data.errors);
+                }
             } catch (e) {
                 console.log(e)
+                dispatch(buttonFinish());
             }
         }
         getKapsters();
-    }, []);
-
-    const handleClick = (id) => {
-        window.location.href = `/admin/kapsters/${id}`;
-    }
+    }, [dispatch]);
 
     return (
         <AdminLayout>
@@ -39,14 +47,16 @@ export default function Kapster() {
                 </div>
                 <div className="flex flex-wrap items-center justify-center gap-10 pb-10">
                     {
-                    kapsters !== undefined && kapsters.map((value, index) => (
-                        <div className="flex flex-col items-center justify-center gap-2" key={index}>
-                            <div className="max-w-sm overflow-hidden text-center rounded-full hover:bg-purple bg-lime text-slate-900 hover:text-white"  >
-                                <img src={value.profile_pic} className="object-cover cursor-pointer object-center w-[250px] h-[250px]" onClick={() => handleClick(value.id)} />
+                        kapsters !== undefined && kapsters.map((value, index) => (
+                            <div className="flex flex-col items-center justify-center gap-2" key={index}>
+                                <div className="max-w-sm overflow-hidden text-center rounded-full hover:bg-purple bg-lime text-slate-900 hover:text-white"  >
+                                    <NavLink to={`/admin/kapsters/${value.id}`}>
+                                        <img src={value.profile_pic} className="object-cover cursor-pointer object-center w-[250px] h-[250px]" />
+                                    </NavLink>
+                                </div>
+                                <p className="text-white">{value.name}</p>
                             </div>
-                            <p className="text-white">{value.name}</p>
-                        </div>
-                    ))}
+                        ))}
                 </div>
             </div>
         </AdminLayout>

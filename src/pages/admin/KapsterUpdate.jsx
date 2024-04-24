@@ -127,17 +127,61 @@ export default function KapsterUpdate() {
 
     const handleUpload = async (e) => {
         e.preventDefault();
-        const response = await fetch(`/api/v1/kapsters/${id}`, {
-            method: "PATCH",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token.token}`
-            },
-            body: JSON.stringify(formData)
-        });
+        try {
+            dispatch(buttonStart());
+            const response = await fetch(`/api/v1/kapsters/${id}`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token.token}`
+                },
+                body: JSON.stringify(formData)
+            });
 
-        const data = await response.json();
-        console.log(data);
+            const data = await response.json();
+            if (!data.errors) {
+                dispatch(buttonFinish());
+            } else {
+                dispatch(buttonFailed(data.errors));
+                throw new Error(data.errors);
+            }
+            console.log(data);
+        } catch (e) {
+            console.log(e);
+            dispatch(buttonFinish());
+        }
+    }
+
+    const handleDelete = async (e) => {
+        e.preventDefault()
+        try {
+            const deleteId = confirm('Are you sure want to delete?');
+            if (deleteId) {
+                dispatch(buttonStart());
+                removeImage();
+                const response = await fetch(`/api/v1/kapsters/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token.token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!data.errors) {
+                    console.log(data);
+                    dispatch(buttonFinish());
+                    window.location.href = '/admin/kapsters';
+                } else {
+                    console.log(data);
+                    dispatch(buttonFailed(data.errors));
+                }
+            }
+        } catch (e) {
+            console.log(e);
+            dispatch(buttonFinish());
+        }
     }
     return (
         <AdminLayout>
@@ -154,6 +198,7 @@ export default function KapsterUpdate() {
                             <label htmlFor="phone" className="text-white">Nomor Telepon</label>
                             <input defaultValue={kapsters?.phone} onChange={handleChange} type="number" name="phone" id="phone" placeholder="Masukan nomor telepon disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
                             <button onClick={handleUpload} disabled={loading} className="w-full p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white">{loading ? "..." : "Ubah"}</button>
+                            <button onClick={handleDelete} disabled={loading} className="w-full p-2 mb-4 bg-red-500 rounded-lg text-slate-900 hover:bg-opacity-70 hover:text-white">{loading ? "..." : "Hapus"}</button>
                         </div>
                         <div className="col-span-6">
                             <div className="w-[320px] h-[250px] overflow-hidden rounded-xl">

@@ -21,6 +21,7 @@ import AdminPrivateRoute from "./components/AdminPrivateRoute";
 import AdminSignRoute from "./components/AdminSignRoute";
 import KapsterUpdate from "./pages/admin/KapsterUpdate";
 import CategoryAdd from "./pages/admin/CategoryAdd";
+import CategoryUpdate from "./pages/admin/CategoryUpdate";
 
 export default function App() {
   return (
@@ -45,6 +46,7 @@ export default function App() {
           <Route path="/admin/schedules/add" element={<ScheduleAdd />} />
           <Route path="/admin/categories" element={<Category />} />
           <Route path="/admin/categories/add" element={<CategoryAdd />} />
+          <Route path="/admin/categories/:id" element={<CategoryUpdate />} />
           <Route path="/admin/kapsters" element={<Kapster />} />
           <Route path="/admin/kapsters/add" element={<KapsterAdd />} />
           <Route path="/admin/kapsters/:id" element={<KapsterUpdate />} />
