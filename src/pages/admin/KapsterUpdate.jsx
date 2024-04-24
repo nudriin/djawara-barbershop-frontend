@@ -4,6 +4,7 @@ import AdminLayout from "../../components/AdminLayout";
 import supabase from "../../supabase";
 import { useDispatch, useSelector } from "react-redux";
 import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
+import swal from "sweetalert2";
 
 export default function KapsterUpdate() {
     const fileRef = useRef(null);
@@ -100,7 +101,19 @@ export default function KapsterUpdate() {
             const data = await response.json();
             if (!data.errors) {
                 dispatch(buttonFinish());
+                swal.fire({
+                    title: "Success",
+                    text: "Gambar berhasil diubah!",
+                    icon: "success",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
             } else {
+                swal.fire({
+                    title: "Error",
+                    text: data.errors,
+                    icon: "error",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
                 throw new Error(data.errors);
             }
         } catch (error) {
@@ -141,8 +154,20 @@ export default function KapsterUpdate() {
             const data = await response.json();
             if (!data.errors) {
                 dispatch(buttonFinish());
+                swal.fire({
+                    title: "Success",
+                    text: "Kapster berhasil diubah!",
+                    icon: "success",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
             } else {
                 dispatch(buttonFailed(data.errors));
+                swal.fire({
+                    title: "Error",
+                    text: data.errors,
+                    icon: "error",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
                 throw new Error(data.errors);
             }
             console.log(data);
@@ -155,8 +180,17 @@ export default function KapsterUpdate() {
     const handleDelete = async (e) => {
         e.preventDefault()
         try {
-            const deleteId = confirm('Are you sure want to delete?');
-            if (deleteId) {
+            const { isConfirmed } = await swal.fire({
+                title: "Anda yakin?",
+                text: "Tindakan ini akan menghapus data anda",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#7E30E1",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes",
+                customClass: 'bg-slate-900 text-lime rounded-xl'
+            });
+            if (isConfirmed) {
                 dispatch(buttonStart());
                 removeImage();
                 const response = await fetch(`/api/v1/kapsters/${id}`, {
@@ -172,10 +206,22 @@ export default function KapsterUpdate() {
                 if (!data.errors) {
                     console.log(data);
                     dispatch(buttonFinish());
+                    swal.fire({
+                        title: "Success",
+                        text: "Kapster berhasil dihapus!",
+                        icon: "success",
+                        customClass: 'bg-slate-900 text-lime rounded-xl'
+                    });
                     window.location.href = '/admin/kapsters';
                 } else {
                     console.log(data);
                     dispatch(buttonFailed(data.errors));
+                    swal.fire({
+                        title: "Error",
+                        text: data.errors,
+                        icon: "error",
+                        customClass: 'bg-slate-900 text-lime rounded-xl'
+                    });
                 }
             }
         } catch (e) {

@@ -1,6 +1,114 @@
+import { useEffect, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
+import { useDispatch, useSelector } from "react-redux";
+import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
+import swal from "sweetalert2";
 
 export default function ScheduleAdd() {
+    const [categories, setCategories] = useState([]);
+    const [kapsters, setKapsters] = useState([]);
+    const [formData, setFormData] = useState({});
+    const {token} = useSelector((state) => state.admin);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const getAllCategories = async () => {
+            try {
+                dispatch(buttonStart());
+                const response = await fetch('/api/v1/categories', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const data = await response.json();
+                if (!data.errors) {
+                    setCategories(data.data);
+                    dispatch(buttonFinish());
+                } else {
+                    dispatch(buttonFailed(data.errors));
+                    throw new Error(data.errors);
+                }
+            } catch (e) {
+                console.log(e);
+                dispatch(buttonFinish());
+            }
+        }
+
+        const getAllKapsters = async () => {
+            try {
+                dispatch(buttonStart());
+                const response = await fetch('/api/v1/kapsters', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const data = await response.json();
+                if (!data.errors) {
+                    setKapsters(data.data);
+                    dispatch(buttonFinish());
+                } else {
+                    dispatch(buttonFailed(data.errors));
+                    throw new Error(data.errors);
+                }
+            } catch (e) {
+                console.log(e);
+                dispatch(buttonFinish());
+            }
+
+        }
+        getAllKapsters();
+        getAllCategories();
+    }, [dispatch]);
+
+    const handleChange = (e) => {
+        setFormData({...formData, [e.target.id] : e.target.value});
+        console.log(formData);
+    }
+
+    const handleUpload = async (e) => {
+        e.preventDefault();
+        try {
+            dispatch(buttonStart());
+            const response = await fetch('/api/v1/schedules', {
+                method : 'POST',
+                headers : {
+                    'Content-Type': 'application/json',
+                    'Authorization' : `Bearer ${token.token}`
+                }, 
+                body : JSON.stringify(formData)
+            });
+
+            const data = response.json();
+
+            if (!data.errors) {
+                console.log(data);
+                dispatch(buttonFinish());
+                swal.fire({
+                    title: "Success",
+                    text: "Jadwal berhasil ditambah!",
+                    icon: "success",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
+                window.location.href = "/admin/schedules"
+            } else {
+                dispatch(buttonFailed(data.errors));
+                swal.fire({
+                    title: "Error",
+                    text: data.errors,
+                    icon: "error",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
+                throw new Error(data.errors);
+            }
+        } catch (e) {
+            dispatch(buttonFinish());
+        }
+    }
+
     return (
         <AdminLayout>
             <div className="flex items-center justify-center min-h-screen text-white bg-slate-900">
@@ -10,12 +118,25 @@ export default function ScheduleAdd() {
                         <h1 className="mt-3 text-3xl text-center font-futura">Tambah Jadwal</h1>
                     </div>
                     <form className="flex flex-col mx-auto">
-                        <label htmlFor="old_password" className="text-white">Password Lama</label>
-                        <input type="password" name="old_password" id="old_password" placeholder="Masukan username disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
-                        <label htmlFor="new_password" className="text-white">Password Baru</label>
-                        <input type="password" name="new_password" id="new_password" placeholder="Masukan password disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
-                        <input type="button" name="show" id="show" className="self-end mt-0 mb-6 cursor-pointer" value="Show" />
-                        <button className="w-full p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white">Tambah</button>
+                        <label htmlFor="kapster_id" className="text-white">Kapster</label>
+                        <select name="kapster_id" id="kapster_id" onChange={handleChange} className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0">
+                            <option value="" selected disabled>Pilih Kapster</option>
+                            {kapsters.map((value, index) => (
+                                <option key={index} value={value.id} >{value.name}</option>
+                            ))}
+                        </select>
+                        <label htmlFor="category_id" className="text-white">Kategori</label>
+                        <select name="category_id" id="category_id" onChange={handleChange} className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0">
+                            <option value="" selected disabled>Pilih Kategori</option>
+                            {categories.map((value, index) => (
+                                <option key={index} value={value.id} >{value.name}</option>
+                            ))}
+                        </select>
+                        <label htmlFor="dates" className="text-white">Tanggal</label>
+                        <input type="date" name="dates" id="dates" onChange={handleChange} className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
+                        <label htmlFor="times" className="text-white">Tanggal</label>
+                        <input type="time" name="times" id="times" onChange={handleChange} className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
+                        <button onClick={handleUpload} className="w-full p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white">Tambah</button>
                     </form>
                     <div className="flex justify-center gap-1 text-sm">
                     </div>

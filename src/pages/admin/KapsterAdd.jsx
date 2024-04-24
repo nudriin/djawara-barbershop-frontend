@@ -3,6 +3,7 @@ import AdminLayout from "../../components/AdminLayout";
 import supabase from "../../supabase";
 import { useDispatch, useSelector } from "react-redux";
 import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
+import swal from "sweetalert2";
 
 export default function KapsterAdd() {
     const fileRef = useRef(null);
@@ -19,10 +20,22 @@ export default function KapsterAdd() {
         if(!error) {
             console.log(data);
             dispatch(buttonFinish());
+            swal.fire({
+                title: "Success",
+                text: "Gambar berhasil diupload!",
+                icon: "success",
+                customClass: 'bg-slate-900 text-lime rounded-xl'
+            });
             return data;
         } else {
             console.log(error);
             dispatch(buttonFailed(error))
+            swal.fire({
+                title: "Error",
+                text: "Gagal mengupload gambar!",
+                icon: "error",
+                customClass: 'bg-slate-900 text-lime rounded-xl'
+            });
         }
     }, [dispatch]); 
 
@@ -63,9 +76,21 @@ export default function KapsterAdd() {
             const data = await response.json();
             if(!data.errors){
                 console.log(data);
+                swal.fire({
+                    title: "Success",
+                    text: "Kapster berhasil ditambah!",
+                    icon: "success",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
                 dispatch(buttonFinish());
             } else {
                 dispatch(buttonFailed(data.errors));
+                swal.fire({
+                    title: "Error",
+                    text: data.errors,
+                    icon: "error",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
                 throw new Error(data.errors);
             }
             

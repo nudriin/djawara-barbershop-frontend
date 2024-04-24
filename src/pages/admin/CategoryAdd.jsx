@@ -2,6 +2,7 @@ import { useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
+import swal from "sweetalert2";
 
 export default function CategoryAdd() {
     const [formData, setFormData] = useState({});
@@ -30,10 +31,22 @@ export default function CategoryAdd() {
 
             if(!data.errors) {
                 console.log(data);
+                swal.fire({
+                    title: "Success",
+                    text: "Kategori berhasil ditambah!",
+                    icon: "success",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
                 dispatch(buttonFinish());
                 window.location.href = '/admin/categories';
             } else {
                 dispatch(buttonFailed(data.errors));
+                swal.fire({
+                    title: "Error",
+                    text: data.errors,
+                    icon: "error",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
                 throw new Error(data.errors);
             }
         } catch (e) {

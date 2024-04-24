@@ -3,6 +3,8 @@ import AdminLayout from "../../components/AdminLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
 import { NavLink } from "react-router-dom";
+import swal from "sweetalert2";
+
 
 export default function Category() {
     const [categories, setCategories] = useState([]);
@@ -12,8 +14,17 @@ export default function Category() {
 
     const handleDelete = useCallback(async (id) => {
         try {
-            const deleteId = confirm('Are you sure want to delete?');
-            if (deleteId) {
+            const { isConfirmed } = await swal.fire({
+                title: "Anda yakin?",
+                text: "Tindakan ini akan menghapus data anda",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#7E30E1",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes",
+                customClass: 'bg-slate-900 text-lime rounded-xl'
+            });
+            if (isConfirmed) {
                 dispatch(buttonStart());
                 const response = await fetch(`/api/v1/categories/${id}`, {
                     method: 'DELETE',
@@ -27,10 +38,22 @@ export default function Category() {
 
                 if (!data.errors) {
                     console.log(data);
+                    swal.fire({
+                        title: "Success",
+                        text: "Kategori berhasil dihapus!",
+                        icon: "success",
+                        customClass: 'bg-slate-900 text-lime rounded-xl'
+                    });
                     dispatch(buttonFinish());
-                    window.location.reload();
+                    setCategories([]);
                 } else {
                     console.log(data);
+                    swal.fire({
+                        title: "Error",
+                        text: data.errors,
+                        icon: "error",
+                        customClass: 'bg-slate-900 text-lime rounded-xl'
+                    });
                     dispatch(buttonFailed(data.errors));
                     throw new Error(data.errors);
                 }
@@ -58,6 +81,12 @@ export default function Category() {
                     dispatch(buttonFinish());
                 } else {
                     dispatch(buttonFailed(data.errors));
+                    swal.fire({
+                        title: "Error",
+                        text: data.errors,
+                        icon: "error",
+                        customClass: 'bg-slate-900 text-lime rounded-xl'
+                    });
                     throw new Error(data.errors);
                 }
             } catch (e) {
@@ -65,13 +94,14 @@ export default function Category() {
                 dispatch(buttonFinish());
             }
         }
-
-        getAllCategories();
+        if (categories.length === 0) {
+            getAllCategories();
+        }
 
         if (deleteId) {
             handleDelete(deleteId);
         }
-    }, [dispatch, deleteId, handleDelete]);
+    }, [dispatch, deleteId, handleDelete, categories]);
 
     return (
         <AdminLayout>
@@ -82,7 +112,11 @@ export default function Category() {
                         <button className="px-2 py-2 rounded-full text-slate-900 bg-lime">Tambah</button>
                     </NavLink>
                 </div>
+                
                 <div className="flex justify-center text-white">
+                {categories.length === 0 ? (
+                    <img className="w-2/4 h-2/4" src="https://kfbgqdcxemiokdktlykv.supabase.co/storage/v1/object/public/nudriin/web_images/undraw_empty_re_opql.svg" />
+                ) : (
                     <table>
                         <thead className="bg-lime text-slate-900">
                             <tr>
@@ -108,6 +142,7 @@ export default function Category() {
                             ))}
                         </tbody>
                     </table>
+                )}
                 </div>
             </div>
         </AdminLayout>

@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import { useSelector, useDispatch } from "react-redux";
 import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
+import swal from "sweetalert2";
 
 export default function Password() {
     const passwordElement = useRef();
@@ -42,9 +43,21 @@ export default function Password() {
             if (!data.errors) {
                 dispatch(buttonFinish());
                 console.log(data);
+                swal.fire({
+                    title: "Success",
+                    text: "Password berhasil diubah!",
+                    icon: "success",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
             } else {
                 console.log(data);
                 dispatch(buttonFailed(data.errors))
+                swal.fire({
+                    title: "Error",
+                    text: data.errors,
+                    icon: "error",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
             }
         } catch (e) {
             console.log(e);

@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 export default function PublicLayout({ children }) {
     const activeLink = 'bg-lime text-slate-900 rounded-full';
     const nonActiveLink = '';
+    const { curAdmin } = useSelector((state) => state.admin);
     return (
         <>
             <div className="fixed top-0 left-0 right-0 z-50 text-white border-2 border-t-0 border-b-2 border-l-0 border-r-0 bg-slate-900 font-poppins border-b-lime">
@@ -29,12 +31,27 @@ export default function PublicLayout({ children }) {
                         </NavLink>
                     </ul>
                     <ul className="flex gap-4">
-                        <NavLink to="/login">
-                            <li className="px-3 py-1 cursor-pointer text-lime">Login</li>
-                        </NavLink>
-                        <NavLink to="/register">
-                            <li className="px-3 py-1 rounded-full cursor-pointer text-slate-900 bg-lime hover:shadow-md hover:bg-dark-lime">Register</li>
-                        </NavLink>
+                        {
+                            curAdmin ? curAdmin.data.role === "USER" ? (
+                                <NavLink to="/profiles">
+                                    <img src={curAdmin?.data?.profile_pic} className="h-9 w-9"/>
+                                </NavLink>
+                            ) : (
+                                <NavLink to="/admin/profiles">
+                                    <img src={curAdmin?.data?.profile_pic} className="h-9 w-9"/>
+                                </NavLink>
+                            ) : (
+                                <>
+                                    <NavLink to="/login">
+                                        <li className="px-3 py-1 cursor-pointer text-lime">Login</li>
+                                    </NavLink>
+                                    <NavLink to="/register">
+                                        <li className="px-3 py-1 rounded-full cursor-pointer text-slate-900 bg-lime hover:shadow-md hover:bg-dark-lime">Register</li>
+                                    </NavLink>
+                                </>
+                            )
+                        }
+
                     </ul>
                 </div>
             </div>

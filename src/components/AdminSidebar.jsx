@@ -1,8 +1,30 @@
 import { NavLink } from "react-router-dom";
+import { persistor } from "../redux/store";
+import swal from "sweetalert2";
 
 export default function Sidebar() {
     const activeLink = 'bg-lime white rounded-full text-slate-900';
     const nonActiveLink = '';
+
+
+    const handleLogout = async () => {
+        const { isConfirmed } = await swal.fire({
+            title: "Anda yakin?",
+            text: "Akan akan keluar dari sistem",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#7E30E1",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes",
+            customClass: 'bg-slate-900 text-lime rounded-xl'
+        });
+        
+        if(isConfirmed) {
+            persistor.purge();
+            window.location.reload();
+        }
+    }
+
     return (
         <div className="flex flex-col justify-between text-white gap-14">
             <NavLink to="/">
@@ -33,7 +55,7 @@ export default function Sidebar() {
                     </NavLink>
                 </ul>
             </div>
-            <button className="px-4 py-2 ml-6 mr-6 font-bold text-left rounded-full bg-purple font-rubik">Logout</button>
+            <button onClick={handleLogout} className="px-4 py-2 ml-6 mr-6 font-bold text-left rounded-full bg-purple font-rubik hover:bg-red-500">Logout</button>
         </div>
     )
 }

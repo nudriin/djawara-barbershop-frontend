@@ -3,6 +3,7 @@ import AdminLayout from "../../components/AdminLayout";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
+import swal from "sweetalert2";
 
 export default function CategoryUpdate() {
     const [formData, setFormData] = useState({});
@@ -62,8 +63,20 @@ export default function CategoryUpdate() {
             if (!data.errors) {
                 console.log(data);
                 dispatch(buttonFinish());
+                swal.fire({
+                    title: "Success",
+                    text: "Kategori berhasil diubah!",
+                    icon: "success",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
             } else {
                 dispatch(buttonFailed(data.errors));
+                swal.fire({
+                    title: "Error",
+                    text: data.errors,
+                    icon: "error",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
                 throw new Error(data.errors);
             }
         } catch (e) {

@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUserFailed, updateUserStart, updateUserSuccess } from "../../redux/admin/adminSlice";
+import swal from "sweetalert2";
 
 export default function Profile() {
     const { curAdmin, token } = useSelector((state) => state.admin);
@@ -34,8 +35,20 @@ export default function Profile() {
             console.log(data);
             if (!data.errors) {
                 dispatch(updateUserSuccess(data));
+                swal.fire({
+                    title: "Success",
+                    text: "Profil berhasil diubah!",
+                    icon: "success",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
             } else {
                 dispatch(updateUserFailed(data.errors));
+                swal.fire({
+                    title: "Error",
+                    text: data.errors,
+                    icon: "error",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
                 throw new Error(data.errors)
             }
         } catch (e) {
