@@ -17,6 +17,9 @@ export default function PublicLayout({ children }) {
                         <NavLink to="/" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
                             <li className="px-3 py-1 hover:bg-lime hover:text-slate-900 hover:rounded-full">Home</li>
                         </NavLink>
+                        <NavLink to="/kapster" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
+                            <li className="px-3 py-1 hover:bg-lime hover:text-slate-900 hover:rounded-full">Kapster</li>
+                        </NavLink>
                         <NavLink to="/service" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
                             <li className="px-3 py-1 hover:bg-lime hover:text-slate-900 hover:rounded-full">Service</li>
                         </NavLink>
@@ -33,11 +36,11 @@ export default function PublicLayout({ children }) {
                     <ul className="flex gap-4">
                         {
                             curAdmin ? curAdmin.data.role === "USER" ? (
-                                <NavLink to="/profiles">
+                                <NavLink to="/users/profiles">
                                     <img src={curAdmin?.data?.profile_pic} className="h-9 w-9"/>
                                 </NavLink>
                             ) : (
-                                <NavLink to="/admin/profiles">
+                                <NavLink to="/admins/profiles">
                                     <img src={curAdmin?.data?.profile_pic} className="h-9 w-9"/>
                                 </NavLink>
                             ) : (

@@ -99,7 +99,7 @@ export default function Schedule() {
                 <div className='flex flex-col items-center justify-center gap-5'>
                     <div className='space-y-4 text-center'>
                         <h1 className="text-4xl text-white font-futura mb-4">Jadwal</h1>
-                        <NavLink to="/admin/schedules/add">
+                        <NavLink to="/admins/schedules/add">
                             <button className='p-2 rounded-full bg-lime'>Tambah</button>
                         </NavLink>
                     </div>

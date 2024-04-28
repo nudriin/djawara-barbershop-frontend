@@ -3,11 +3,13 @@ import AdminLayout from "../../components/AdminLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
 import swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function CategoryAdd() {
     const [formData, setFormData] = useState({});
     const {token, loading} = useSelector((state) => state.admin);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({...formData, [e.target.id] : e.target.value});
@@ -38,7 +40,7 @@ export default function CategoryAdd() {
                     customClass: 'bg-slate-900 text-lime rounded-xl'
                 });
                 dispatch(buttonFinish());
-                window.location.href = '/admin/categories';
+                navigate('/admins/categories');
             } else {
                 dispatch(buttonFailed(data.errors));
                 swal.fire({

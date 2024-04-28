@@ -1,10 +1,16 @@
-import { useRef } from "react"
-import { NavLink } from "react-router-dom";
+import { useRef, useState } from "react"
+import { NavLink, useNavigate } from "react-router-dom";
 import PublicLayout from "../../components/PublicLayout";
+import swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { getUserSuccess, signInFailed, signInStart, signInSuccess } from "../../redux/admin/adminSlice";
 
 export default function Login() {
     const passwordElement = useRef();
     const showElement = useRef();
+    const [formData, setFormData] = useState({});
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleShow = () => {
         if (passwordElement.current.type === "password") {
@@ -15,6 +21,68 @@ export default function Login() {
             showElement.current.value = 'Show';
         }
     }
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.value
+        });
+        console.log(formData);
+    }
+
+    const handleLogin = async (event) => {
+        event.preventDefault();
+        try {
+            dispatch(signInStart());
+            const response = await fetch("/api/v1/admins/login", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+            if (data.errors) {
+                console.log(data.errors);
+                dispatch(signInFailed(data.errors))
+                throw new Error(data.errors);
+            }
+            if (!data.errors) {
+                dispatch(signInSuccess(data.data))
+                const response = await fetch("/api/v1/users/current", {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${data.data.token}`
+                    }
+                });
+
+                const curAdmin = await response.json();
+                console.log(curAdmin);
+                console.log(data);
+                dispatch(getUserSuccess(curAdmin));
+                swal.fire({
+                    title: "Success",
+                    text: "Login berhasil!",
+                    icon: "success",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
+                navigate("/users/profiles");
+            } else {
+                throw new Error(data.errors)
+            }
+        } catch (e) {
+            swal.fire({
+                title: "Error",
+                text: e.message,
+                icon: "error",
+                customClass: 'bg-slate-900 text-lime rounded-xl'
+            });
+            console.log(e);
+        }
+    }
+
     return (
         <PublicLayout>
             <section className="flex items-center justify-center min-h-screen py-24 text-white bg-slate-900">
@@ -26,11 +94,11 @@ export default function Login() {
                     </div>
                     <form className="flex flex-col mx-auto">
                         <label htmlFor="username" className="text-white">Username</label>
-                        <input type="text" name="username" id="username" placeholder="Masukan username disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
+                        <input onChange={handleChange} type="text" name="username" id="username" placeholder="Masukan username disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
                         <label htmlFor="password" className="text-white">Password</label>
-                        <input type="password" name="password" id="password" placeholder="Masukan password disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" ref={passwordElement} />
+                        <input onChange={handleChange} type="password" name="password" id="password" placeholder="Masukan password disini..." className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" ref={passwordElement} />
                         <input type="button" name="show" id="show" className="self-end mt-0 mb-6 cursor-pointer" value="Show" ref={showElement} onClick={handleShow} />
-                        <button className="w-full p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white">Login</button>
+                        <button onClick={handleLogin} className="w-full p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white">Login</button>
                     </form>
                     <div className="flex justify-center gap-1 text-sm">
                         <p className="">Belum punya akun?</p>

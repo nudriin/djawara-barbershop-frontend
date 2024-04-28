@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useCallback, useEffect, useRef, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import supabase from "../../supabase";
@@ -14,6 +14,7 @@ export default function KapsterUpdate() {
     const [kapsters, setKapsters] = useState({});
     const { loading, token } = useSelector((state) => state.admin);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { id } = useParams();
 
@@ -212,7 +213,7 @@ export default function KapsterUpdate() {
                         icon: "success",
                         customClass: 'bg-slate-900 text-lime rounded-xl'
                     });
-                    window.location.href = '/admin/kapsters';
+                    navigate('/admins/kapsters');
                 } else {
                     console.log(data);
                     dispatch(buttonFailed(data.errors));

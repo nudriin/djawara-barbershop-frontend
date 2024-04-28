@@ -47,7 +47,7 @@ export default function Kapster() {
             <div className="flex flex-col items-center justify-center w-9/12 gap-5 mx-auto">
                 <div className="space-y-4 text-center">
                     <h1 className="mb-4 text-4xl text-white font-futura">Kapster</h1>
-                    <NavLink to="/admin/kapsters/add">
+                    <NavLink to="/admins/kapsters/add">
                         <button className="px-2 py-2 rounded-full text-slate-900 bg-lime">Tambah</button>
                     </NavLink>
                 </div>
@@ -59,7 +59,7 @@ export default function Kapster() {
                             kapsters !== undefined && kapsters.map((value, index) => (
                                 <div className="flex flex-col items-center justify-center gap-2" key={index}>
                                     <div className="max-w-sm overflow-hidden text-center rounded-full hover:bg-purple bg-lime text-slate-900 hover:text-white"  >
-                                        <NavLink to={`/admin/kapsters/${value.id}`}>
+                                        <NavLink to={`/admins/kapsters/${value.id}`}>
                                             <img src={value.profile_pic} className="object-cover cursor-pointer object-center w-[250px] h-[250px]" />
                                         </NavLink>
                                     </div>

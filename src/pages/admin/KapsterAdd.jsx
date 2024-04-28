@@ -4,6 +4,7 @@ import supabase from "../../supabase";
 import { useDispatch, useSelector } from "react-redux";
 import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
 import swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function KapsterAdd() {
     const fileRef = useRef(null);
@@ -12,6 +13,7 @@ export default function KapsterAdd() {
     const [formData, setFormData] = useState({});
     const {loading, token} = useSelector((state) => state.admin);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const uploadImage = useCallback(async (image) => {
         dispatch(buttonStart());
@@ -95,7 +97,7 @@ export default function KapsterAdd() {
             }
             
             if(!loading) {
-                window.location.href = "/admin/kapsters/";
+                navigate("/admins/kapsters/");
             }
             
             

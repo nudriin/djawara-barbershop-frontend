@@ -13,7 +13,6 @@ import Kapster from "./pages/admin/Kapster";
 import Profile from "./pages/admin/Profile";
 import Password from "./pages/admin/Password";
 import Report from "./pages/admin/Report";
-import Pemweb from "./pages/public/Pemweb";
 import ScheduleAdd from "./pages/admin/ScheduleAdd";
 import KapsterAdd from "./pages/admin/KapsterAdd";
 import LoginAdmin from "./pages/public/LoginAdmin";
@@ -22,6 +21,13 @@ import AdminSignRoute from "./components/AdminSignRoute";
 import KapsterUpdate from "./pages/admin/KapsterUpdate";
 import CategoryAdd from "./pages/admin/CategoryAdd";
 import CategoryUpdate from "./pages/admin/CategoryUpdate";
+import UserProfile from "./pages/user/UserProfile";
+import UserPassword from "./pages/user/UserPassword";
+import UserSignRoute from "./components/UserSignRoute";
+import UserPrivateRoute from "./components/UserPrivateRoute";
+import UserOrder from "./pages/user/UserOrder";
+import UserReport from "./pages/user/UserReport";
+import KapsterPublic from "./pages/public/KapsterPublic";
 
 export default function App() {
   return (
@@ -33,27 +39,39 @@ export default function App() {
         <Route path="/booking" element={<Booking />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/pemweb" element={<Pemweb />} />
+        <Route path="/kapster" element={<KapsterPublic />} />
+
 
         <Route element={<AdminSignRoute />}>
+          <Route path="/admins/login" element={<LoginAdmin />} />
+        </Route>
+
+        <Route element={<UserSignRoute />}>
           <Route path="/login" element={<Login />} />
-          <Route path="/admin/login" element={<LoginAdmin />} />
         </Route>
 
         <Route element={<AdminPrivateRoute />}>
-          <Route path="/admin/orders" element={<Order />} />
-          <Route path="/admin/schedules" element={<Schedule />} />
-          <Route path="/admin/schedules/add" element={<ScheduleAdd />} />
-          <Route path="/admin/categories" element={<Category />} />
-          <Route path="/admin/categories/add" element={<CategoryAdd />} />
-          <Route path="/admin/categories/:id" element={<CategoryUpdate />} />
-          <Route path="/admin/kapsters" element={<Kapster />} />
-          <Route path="/admin/kapsters/add" element={<KapsterAdd />} />
-          <Route path="/admin/kapsters/:id" element={<KapsterUpdate />} />
-          <Route path="/admin/profiles" element={<Profile />} />
-          <Route path="/admin/passwords" element={<Password />} />
-          <Route path="/admin/reports" element={<Report />} />
+          <Route path="/admins/orders" element={<Order />} />
+          <Route path="/admins/schedules" element={<Schedule />} />
+          <Route path="/admins/schedules/add" element={<ScheduleAdd />} />
+          <Route path="/admins/categories" element={<Category />} />
+          <Route path="/admins/categories/add" element={<CategoryAdd />} />
+          <Route path="/admins/categories/:id" element={<CategoryUpdate />} />
+          <Route path="/admins/kapsters" element={<Kapster />} />
+          <Route path="/admins/kapsters/add" element={<KapsterAdd />} />
+          <Route path="/admins/kapsters/:id" element={<KapsterUpdate />} />
+          <Route path="/admins/profiles" element={<Profile />} />
+          <Route path="/admins/passwords" element={<Password />} />
+          <Route path="/admins/reports" element={<Report />} />
         </Route>
+
+        <Route element={<UserPrivateRoute />}>
+          <Route path="/users/orders" element={<UserOrder />} />
+          <Route path="/users/profiles" element={<UserProfile />} />
+          <Route path="/users/passwords" element={<UserPassword />} />
+          <Route path="/users/histories" element={<UserReport />} />
+        </Route>
+
       </Routes>
     </BrowserRouter>
   )

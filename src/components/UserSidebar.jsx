@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { persistor } from "../redux/store";
 import swal from "sweetalert2";
 
-export default function AdminSidebar() {
+export default function UserSidebar() {
     const activeLink = 'bg-lime white rounded-full text-slate-900';
     const nonActiveLink = '';
 
@@ -32,26 +32,17 @@ export default function AdminSidebar() {
             </NavLink>
             <div>
                 <ul className="flex flex-col gap-4 ml-6 mr-6">
-                    <NavLink to="/admins/orders" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
+                    <NavLink to="/users/orders" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
                         <li className="px-4 py-2 font-bold font-rubik hover:bg-lime hover:text-slate-900 hover:rounded-full">Pesanan</li>
                     </NavLink>
-                    <NavLink to="/admins/schedules" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
-                        <li className="px-4 py-2 font-bold font-rubik hover:bg-lime hover:text-slate-900 hover:rounded-full">Jadwal</li>
-                    </NavLink>
-                    <NavLink to="/admins/categories" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
-                        <li className="px-4 py-2 font-bold font-rubik hover:bg-lime hover:text-slate-900 hover:rounded-full">Kategori</li>
-                    </NavLink>
-                    <NavLink to="/admins/kapsters" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
-                        <li className="px-4 py-2 font-bold font-rubik hover:bg-lime hover:text-slate-900 hover:rounded-full">Kapster</li>
-                    </NavLink>
-                    <NavLink to="/admins/profiles" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
+                    <NavLink to="/users/profiles" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
                         <li className="px-4 py-2 font-bold font-rubik hover:bg-lime hover:text-slate-900 hover:rounded-full">Profil</li>
                     </NavLink>
-                    <NavLink to="/admins/passwords" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
+                    <NavLink to="/users/passwords" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
                         <li className="px-4 py-2 font-bold font-rubik hover:bg-lime hover:text-slate-900 hover:rounded-full">Password</li>
                     </NavLink>
-                    <NavLink to="/admins/reports" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
-                        <li className="px-4 py-2 font-bold font-rubik hover:bg-lime hover:text-slate-900 hover:rounded-full">Laporan</li>
+                    <NavLink to="/users/histories" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
+                        <li className="px-4 py-2 font-bold font-rubik hover:bg-lime hover:text-slate-900 hover:rounded-full">Riwayat</li>
                     </NavLink>
                 </ul>
             </div>

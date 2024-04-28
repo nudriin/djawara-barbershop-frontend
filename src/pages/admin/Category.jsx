@@ -108,7 +108,7 @@ export default function Category() {
             <div className="flex flex-col items-center justify-center gap-5">
                 <div className="space-y-4 text-center">
                     <h1 className="mb-4 text-4xl text-white font-futura">Kategori</h1>
-                    <NavLink to="/admin/categories/add">
+                    <NavLink to="/admins/categories/add">
                         <button className="px-2 py-2 rounded-full text-slate-900 bg-lime">Tambah</button>
                     </NavLink>
                 </div>
@@ -133,7 +133,7 @@ export default function Category() {
                                     <td className="px-2 py-3">{value.name}</td>
                                     <td className="px-2 py-3">{value.price}</td>
                                     <td className="px-2 py-3 space-x-1">
-                                        <NavLink to={`/admin/categories/${value.id}`}>
+                                        <NavLink to={`/admins/categories/${value.id}`}>
                                             <button className='px-2 rounded-full bg-lime text-slate-900'>Ubah</button>
                                         </NavLink>
                                         <button onClick={() => setDeleteId(value.id)} className='px-2 bg-red-500 rounded-full'>Hapus</button>

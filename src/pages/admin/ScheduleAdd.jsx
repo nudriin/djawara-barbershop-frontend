@@ -3,6 +3,7 @@ import AdminLayout from "../../components/AdminLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
 import swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function ScheduleAdd() {
     const [categories, setCategories] = useState([]);
@@ -10,6 +11,7 @@ export default function ScheduleAdd() {
     const [formData, setFormData] = useState({});
     const {token} = useSelector((state) => state.admin);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getAllCategories = async () => {
@@ -93,7 +95,7 @@ export default function ScheduleAdd() {
                     icon: "success",
                     customClass: 'bg-slate-900 text-lime rounded-xl'
                 });
-                window.location.href = "/admin/schedules"
+                navigate("/admins/schedules");
             } else {
                 dispatch(buttonFailed(data.errors));
                 swal.fire({
@@ -134,7 +136,7 @@ export default function ScheduleAdd() {
                         </select>
                         <label htmlFor="dates" className="text-white">Tanggal</label>
                         <input type="date" name="dates" id="dates" onChange={handleChange} className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
-                        <label htmlFor="times" className="text-white">Tanggal</label>
+                        <label htmlFor="times" className="text-white">Jam</label>
                         <input type="time" name="times" id="times" onChange={handleChange} className="w-full p-2 mb-4 border rounded-lg bg-slate-800 border-lime focus:outline-0" />
                         <button onClick={handleUpload} className="w-full p-2 mb-4 rounded-lg bg-lime text-slate-900 hover:bg-purple hover:text-white">Tambah</button>
                     </form>
