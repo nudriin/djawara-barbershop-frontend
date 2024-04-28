@@ -98,7 +98,7 @@ export default function Schedule() {
             <div>
                 <div className='flex flex-col items-center justify-center gap-5'>
                     <div className='space-y-4 text-center'>
-                        <h1 className="text-4xl text-white font-futura mb-4">Jadwal</h1>
+                        <h1 className="mb-4 text-4xl text-white font-futura">Jadwal</h1>
                         <NavLink to="/admins/schedules/add">
                             <button className='p-2 rounded-full bg-lime'>Tambah</button>
                         </NavLink>
@@ -117,6 +117,8 @@ export default function Schedule() {
                                         <th className="px-2">Kategori</th>
                                         <th className="px-2">Tanggal</th>
                                         <th className="px-2">Jam</th>
+                                        <th className="px-2">Harga</th>
+                                        <th className="px-2">Status</th>
                                         <th className="px-2">Aksi</th>
                                     </tr>
                                 </thead>
@@ -128,6 +130,8 @@ export default function Schedule() {
                                             <td className="px-2 py-3">{value.category_name}</td>
                                             <td className="px-2 py-3">{value.dates}</td>
                                             <td className="px-2 py-3">{value.times}</td>
+                                            <td className="px-2 py-3">{new Intl.NumberFormat("id-ID", {style: "currency", currency: "IDR"}).format(value.category_price)}</td>
+                                            <td className="px-2 py-3">{value.status}</td>
                                             <td className="px-2 py-3">
                                                 <button onClick={() => handleDelete(value.schedule_id)} className='px-2 bg-red-500 rounded-full'>Hapus</button>
                                             </td>
