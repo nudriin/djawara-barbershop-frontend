@@ -136,7 +136,7 @@ export default function Category() {
                                         <NavLink to={`/admins/categories/${value.id}`}>
                                             <button className='px-2 rounded-full bg-lime text-slate-900'>Ubah</button>
                                         </NavLink>
-                                        <button onClick={() => setDeleteId(value.id)} className='px-2 bg-red-500 rounded-full'>Hapus</button>
+                                        <button onClick={() => setDeleteId(value.id)} className='px-2 bg-red-500 rounded-full cursor-pointer'>Hapus</button>
                                     </td>
                                 </tr>
                             ))}

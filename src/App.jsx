@@ -36,7 +36,6 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/service" element={<Service />} />
         <Route path="/pricelist" element={<Pricelist />} />
-        <Route path="/booking" element={<Booking />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/register" element={<Register />} />
         <Route path="/kapster" element={<KapsterPublic />} />
@@ -70,6 +69,7 @@ export default function App() {
           <Route path="/users/profiles" element={<UserProfile />} />
           <Route path="/users/passwords" element={<UserPassword />} />
           <Route path="/users/histories" element={<UserReport />} />
+          <Route path="/booking" element={<Booking />} />
         </Route>
 
       </Routes>
