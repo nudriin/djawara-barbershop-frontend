@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
 import UserLayout from "../../components/UserLayout";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
 import swal from "sweetalert2";
@@ -124,8 +124,9 @@ export default function UserOrder() {
                                 <th className="px-2">ID</th>
                                 <th className="px-2">Kapster</th>
                                 <th className="px-2">Kategori</th>
-                                <th className="px-2">Waktu</th>
+                                <th className="px-2">Jadwal</th>
                                 <th className="px-2">Harga</th>
+                                <th className="px-2">Waktu Order</th>
                                 <th className="px-2">Status</th>
                                 <th className="px-2">Aksi</th>
                             </tr>
@@ -138,7 +139,8 @@ export default function UserOrder() {
                                     <td className="px-2 py-3">{value.kapster_name}</td>
                                     <td className="px-2 py-3">{value.category_name}</td>
                                     <td className="px-2 py-3">{value.schedule_date}</td>
-                                    <td className="px-2 py-3">{value.total_price}</td>
+                                    <td className="px-2 py-3">{new Intl.NumberFormat("id-ID", {style: "currency", currency: "IDR"}).format(value.total_price)}</td>
+                                    <td className="px-2 py-3">{value.order_date}</td>
                                     <td className="px-2 py-3"><span className={value.status == "PENDING" ? pendingClass : confirmedClass}>{value.status}</span></td>
                                     <td className="px-2 py-3">
                                         <button onClick={() => setCancelId(value.id)} className="bg-red-500 px-2 rounded-full">Batal</button>
