@@ -25,7 +25,7 @@ export default function Schedule() {
 
                 if (!data.errors) {
                     dispatch(buttonFinish());
-                    setSchedules(data?.data?.schedules);
+                    setSchedules(data?.data);
                 } else {
                     dispatch(buttonFailed(data.errors));
                     swal.fire({

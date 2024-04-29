@@ -24,7 +24,7 @@ export default function Booking() {
 
                 if (!data.errors) {
                     dispatch(buttonFinish());
-                    setSchedules(data?.data?.schedules);
+                    setSchedules(data?.data);
                 } else {
                     dispatch(buttonFailed(data.errors));
                     swal.fire({
@@ -67,7 +67,7 @@ export default function Booking() {
                         <label htmlFor="kapsters" className="text-white">Jadwal</label>
                         <select id="kapsters" className="w-full col-span-12 p-2 border rounded-lg cursor-pointer bg-slate-800 border-lime">
                             {schedules.map((value, index) => (
-                                <option className="cursor-pointer" value={value.schedule_id} key={index}>
+                                value.status != "BOOKED" ?  <option className="cursor-pointer" value={value.schedule_id} key={index}>
                                     <ul>
                                         <li> {value.kapster_name} | </li>
                                         <li> {value.category_name} | </li>
@@ -75,7 +75,7 @@ export default function Booking() {
                                         <li> {value.dates} | </li>
                                         <li> {value.times} WIB</li>
                                     </ul>
-                                </option>
+                                </option> : <option key={index} hidden></option>
                             ))}
                         </select>
                         <label className="w-full col-span-12 p-2 mt-4 text-center rounded-lg cursor-pointer bg-lime text-slate-900 hover:bg-purple hover:text-white">Book now</label>
