@@ -131,7 +131,7 @@ export default function Category() {
                                 <tr key={index}>
                                     <td className="px-2 py-3">{value.id}</td>
                                     <td className="px-2 py-3">{value.name}</td>
-                                    <td className="px-2 py-3">{value.price}</td>
+                                    <td className="px-2 py-3">{new Intl.NumberFormat("id-ID", {style: "currency", currency: "IDR"}).format(value.price)}</td>
                                     <td className="px-2 py-3 space-x-1">
                                         <NavLink to={`/admins/categories/${value.id}`}>
                                             <button className='px-2 rounded-full bg-lime text-slate-900'>Ubah</button>
