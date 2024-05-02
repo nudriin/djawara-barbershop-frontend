@@ -1,8 +1,14 @@
-import { useSelector } from "react-redux";
 import { Outlet, Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 export default function AdminPrivateRoute() {
-    const{curAdmin} = useSelector((state) => state.admin);
+    const token = Cookies.get('token');
 
-    return curAdmin?.data?.role == "ADMIN" || curAdmin?.data?.role == "OWNER" ? <Outlet /> : <Navigate to="/admins/login" />
+    if (!token) {
+        return <Navigate to="/admins/login" />
+    }
+    const admin = jwtDecode(token);
+
+    return admin?.role == "ADMIN" || admin?.role == "OWNER" ? <Outlet /> : <Navigate to="/admins/login" />
 }

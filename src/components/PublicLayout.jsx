@@ -1,11 +1,21 @@
 /* eslint-disable react/prop-types */
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 export default function PublicLayout({ children }) {
+    const [user, setUser] = useState(null);
     const activeLink = 'bg-lime text-slate-900 rounded-full';
     const nonActiveLink = '';
-    const { curAdmin } = useSelector((state) => state.admin);
+
+    useEffect(() => {
+        const token = Cookies.get('token');
+        if(token) {
+            setUser(jwtDecode(token))
+        }
+    }, []);
+
     return (
         <>
             <div className="fixed top-0 left-0 right-0 z-50 text-white border-2 border-t-0 border-b-2 border-l-0 border-r-0 bg-slate-900 font-poppins border-b-lime">
@@ -35,13 +45,13 @@ export default function PublicLayout({ children }) {
                     </ul>
                     <ul className="flex gap-4">
                         {
-                            curAdmin ? curAdmin.data.role === "USER" ? (
+                            user ? user?.role === "USER" ? (
                                 <NavLink to="/users/profiles">
-                                    <img src={curAdmin?.data?.profile_pic} className="h-9 w-9"/>
+                                    <img src={user?.profile_pic} className="h-9 w-9"/>
                                 </NavLink>
                             ) : (
                                 <NavLink to="/admins/profiles">
-                                    <img src={curAdmin?.data?.profile_pic} className="h-9 w-9"/>
+                                    <img src={user?.profile_pic} className="h-9 w-9"/>
                                 </NavLink>
                             ) : (
                                 <>
@@ -54,7 +64,6 @@ export default function PublicLayout({ children }) {
                                 </>
                             )
                         }
-
                     </ul>
                 </div>
             </div>

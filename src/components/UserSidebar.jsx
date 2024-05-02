@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { persistor } from "../redux/store";
 import swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 export default function UserSidebar() {
     const activeLink = 'bg-lime white rounded-full text-slate-900';
@@ -21,6 +22,7 @@ export default function UserSidebar() {
         
         if(isConfirmed) {
             persistor.purge();
+            Cookies.remove('token');
             window.location.reload();
         }
     }

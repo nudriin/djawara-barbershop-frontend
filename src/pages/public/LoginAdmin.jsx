@@ -62,7 +62,7 @@ export default function LoginAdmin() {
                 console.log(data);
                 dispatch(getUserSuccess(curAdmin));
             }
-            navigate("/admin/profiles");
+            navigate("/admins/profiles");
         } catch (e) {
             console.log(e);
         }
