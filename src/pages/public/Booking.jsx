@@ -51,37 +51,49 @@ export default function Booking() {
     const handleClick = async (e) => {
         e.preventDefault();
         try {
-            dispatch(buttonStart());
-            const response = await fetch('/api/v1/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    account_id: curAdmin?.data?.id,
-                    schedule_id: scheduleRef.current.value
-                })
+            const { isConfirmed } = await swal.fire({
+                title: "Anda yakin?",
+                text: "Anda akan melakukan pemesanan",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#7E30E1",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes",
+                customClass: 'bg-slate-900 text-lime rounded-xl'
             });
+            if (isConfirmed) {
+                dispatch(buttonStart());
+                const response = await fetch('/api/v1/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        account_id: curAdmin?.data?.id,
+                        schedule_id: scheduleRef.current.value
+                    })
+                });
 
-            const data = await response.json();
-            if (!data.errors) {
-                dispatch(buttonFinish());
-                swal.fire({
-                    title: "Success",
-                    text: "Booking berhasil!",
-                    icon: "success",
-                    customClass: 'bg-slate-900 text-lime rounded-xl'
-                });
-                navigate('/booking');
-            } else {
-                dispatch(buttonFailed(data.errors));
-                swal.fire({
-                    title: "Error",
-                    text: data.errors,
-                    icon: "error",
-                    customClass: 'bg-slate-900 text-lime rounded-xl'
-                });
-                throw new Error(data.errors);
+                const data = await response.json();
+                if (!data.errors) {
+                    dispatch(buttonFinish());
+                    swal.fire({
+                        title: "Success",
+                        text: "Booking berhasil!",
+                        icon: "success",
+                        customClass: 'bg-slate-900 text-lime rounded-xl'
+                    });
+                    navigate('/booking');
+                } else {
+                    dispatch(buttonFailed(data.errors));
+                    swal.fire({
+                        title: "Error",
+                        text: data.errors,
+                        icon: "error",
+                        customClass: 'bg-slate-900 text-lime rounded-xl'
+                    });
+                    throw new Error(data.errors);
+                }
             }
         } catch (e) {
             dispatch(buttonFinish());
@@ -110,8 +122,7 @@ export default function Booking() {
                         <label htmlFor="kapsters" className="text-white">Jadwal</label>
                         <select ref={scheduleRef} id="kapsters" className="w-full col-span-12 p-2 border rounded-lg cursor-pointer bg-slate-800 border-lime">
                             <option value="" selected disabled>Pilih Jadwal</option>
-                            {schedules.map((value, index) => (
-                                value.status != "BOOKED" &&
+                            {schedules.filter((value) => value.status != "BOOKED" && new Date(value.dates + " " + value.times) > new Date()).map((value, index) => (
                                 <option className="cursor-pointer" value={value.schedule_id} key={index}>
                                     {value.kapster_name} | {value.category_name} | {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(value.category_price)} | {value.dates} | {value.times} WIB
                                 </option>))}

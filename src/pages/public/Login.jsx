@@ -68,7 +68,11 @@ export default function Login() {
                     icon: "success",
                     customClass: 'bg-slate-900 text-lime rounded-xl'
                 });
-                navigate("/users/profiles");
+                if(curAdmin?.data?.role == "USER") {
+                    navigate("/users/profiles");
+                } else {
+                    navigate("/admins/profiles");
+                }
             } else {
                 throw new Error(data.errors)
             }

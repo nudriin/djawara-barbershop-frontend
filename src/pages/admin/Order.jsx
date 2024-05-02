@@ -9,10 +9,16 @@ export default function Order() {
     const [orders, setOrders] = useState([]);
     const { curAdmin } = useSelector((state) => state.admin);
     const statusRef = useRef(null);
+    const [formData, setFormData] = useState({});
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const pendingClass = "bg-yellow-400 text-slate-900 px-2 rounded-full";
     const confirmedClass = "bg-green-400 text-slate-900 px-2 rounded-full";
+
+    const handleChange = (e) => {
+        setFormData({...formData, [e.target.id] : e.target.value});
+        console.log(formData);
+    }
 
     const handleStatus = async (id) => {
         try {
@@ -33,9 +39,7 @@ export default function Order() {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        status : statusRef.current.value
-                    })
+                    body: JSON.stringify(formData)
                 });
 
                 const data = await response.json();
@@ -44,7 +48,7 @@ export default function Order() {
                     console.log(data);
                     swal.fire({
                         title: "Success",
-                        text: "Pesanan berhasil dibatalkan!",
+                        text: "Status berhasil diubah!",
                         icon: "success",
                         customClass: 'bg-slate-900 text-lime rounded-xl'
                     });
@@ -125,6 +129,7 @@ export default function Order() {
                                 <th className="px-2">Harga</th>
                                 <th className="px-2">Waktu Order</th>
                                 <th className="px-2">Status</th>
+                                <th className="px-2">Aksi</th>
                             </tr>
                         </thead>
                         <tbody className="border border-lime">
@@ -139,13 +144,16 @@ export default function Order() {
                                     <td className="px-2 py-3">{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(value.total_price)}</td>
                                     <td className="px-2 py-3">{value.order_date}</td>
                                     <td className="px-2 py-3">
-                                        <select ref={statusRef} onChange={() => handleStatus(value.id)} name="status" id="status" className={value.status == "PENDING" ? pendingClass : confirmedClass}>
-                                            <option disabled selected defaultValue={value.status}>{value.status}</option>
-                                            <option value="PENDING">Pending</option>
-                                            <option value="CONFIRMED">Konfirmasi</option>
-                                            <option value="COMPLETED">Selesai</option>
-                                            <option value="CANCELED">Batal</option>
+                                        <select onChange={handleChange} ref={statusRef} name="status" id="status" className={value.status == "PENDING" ? pendingClass : confirmedClass}>
+                                            <option disabled selected value="">{value.status}</option>
+                                            <option value="PENDING">PENDING</option>
+                                            <option value="CONFIRMED">CONFIRMED</option>
+                                            <option value="COMPLETED">COMPLETED</option>
+                                            <option value="CANCELED">CANCELED</option>
                                         </select>
+                                    </td>
+                                    <td>
+                                    <button onClick={() => handleStatus(value.id)} className="bg-lime px-2 text-slate-900 rounded-full">Ubah</button>
                                     </td>
                                 </tr>
                             ))}
