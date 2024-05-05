@@ -19,7 +19,7 @@ export default function Pricelist() {
                                 <li className="text-xl font-bold">
                                     <span className="flex justify-between">
                                         <p>Beard Trim</p>
-                                        <p className="px-2 py-1 bg-lime text-slate-900 rounded-xl">Rp 20.000</p>
+                                        <p className="px-2 py-1 bg-lime text-slate-900 rounded-xl">Rp 10.000</p>
                                     </span>
                                 </li>
                                 <li className="text-xl font-bold">
@@ -31,13 +31,13 @@ export default function Pricelist() {
                                 <li className="text-xl font-bold">
                                     <span className="flex justify-between">
                                         <p>Shaves</p>
-                                        <p className="px-2 py-1 bg-lime text-slate-900 rounded-xl">Rp 20.000</p>
+                                        <p className="px-2 py-1 bg-lime text-slate-900 rounded-xl">Rp 10.000</p>
                                     </span>
                                 </li>
                                 <li className="text-xl font-bold">
                                     <span className="flex justify-between">
                                         <p>Styling</p>
-                                        <p className="px-2 py-1 bg-lime text-slate-900 rounded-xl">Rp 20.000</p>
+                                        <p className="px-2 py-1 bg-lime text-slate-900 rounded-xl">Rp 10.000</p>
                                     </span>
                                 </li>
                             </ul>

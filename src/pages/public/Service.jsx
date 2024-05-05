@@ -21,7 +21,7 @@ export default function Service() {
                             <img src={haircutColorImg} className="object-cover object-top w-[360px] h-[250px]" />
                             <div className="flex justify-between px-6 py-4">
                                 <h1 className="font-bold">Hair Color</h1>
-                                <h1 className="font-bold">Rp 20.000</h1>
+                                <h1 className="font-bold">Rp 110.000</h1>
                             </div>
                         </div>
                         <div className="max-w-sm overflow-hidden text-center hover:bg-purple rounded-2xl bg-lime text-slate-900 hover:text-white">
@@ -35,7 +35,7 @@ export default function Service() {
                             <img src={kidsImg} className="object-cover object-top w-[360px] h-[250px]" />
                             <div className="flex justify-between px-6 py-4">
                                 <h1 className="font-bold">Kids</h1>
-                                <h1 className="font-bold">Rp 20.000</h1>
+                                <h1 className="font-bold">Rp 15.000</h1>
                             </div>
                         </div>
                     </div>
