@@ -1,14 +1,16 @@
 import { useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import PublicLayout from "../../components/PublicLayout";
 import { useDispatch } from "react-redux";
 import { buttonFailed, buttonFinish, buttonStart } from "../../redux/admin/adminSlice";
+import swal from "sweetalert2";
 
 export default function Register() {
     const passwordElement = useRef();
     const showElement = useRef();
     const [formData, setFormData] = useState({});
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleShow = () => {
         if (passwordElement.current.type === "password") {
@@ -42,12 +44,25 @@ export default function Register() {
             if(!data.errors) {
                 console.log(data);
                 dispatch(buttonFinish());
+                swal.fire({
+                    title: "Success",
+                    text: "Register berhasil!",
+                    icon: "success",
+                    customClass: 'bg-slate-900 text-lime rounded-xl'
+                });
+                navigate("/login");
             } else {
                 console.log(data.errors);
                 dispatch(buttonFailed(data.errors));
+                throw new Error(data.errors)
             }
         } catch (e) {
-            console.log(e);
+            swal.fire({
+                title: "Error",
+                text: e.message,
+                icon: "error",
+                customClass: 'bg-slate-900 text-lime rounded-xl'
+            });
         }
     }
 
