@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getUserSuccess, signInFailed, signInStart, signInSuccess } from "../../redux/admin/adminSlice";
 import { useNavigate } from "react-router-dom";
+import swal from "sweetalert2";
 
 export default function LoginAdmin() {
     const passwordElement = useRef();
@@ -61,9 +62,21 @@ export default function LoginAdmin() {
                 console.log(curAdmin);
                 console.log(data);
                 dispatch(getUserSuccess(curAdmin));
+                if(curAdmin?.data?.role == "USER") {
+                    navigate("/users/profiles");
+                } else {
+                    navigate("/admins/profiles");
+                }
+            } else {
+                throw new Error(data.errors)
             }
-            navigate("/admins/profiles");
         } catch (e) {
+            swal.fire({
+                title: "Error",
+                text: e.message,
+                icon: "error",
+                customClass: 'bg-slate-900 text-lime rounded-xl'
+            });
             console.log(e);
         }
         
