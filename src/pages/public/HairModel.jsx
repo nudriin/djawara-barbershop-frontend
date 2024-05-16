@@ -19,7 +19,7 @@ export default function HairModel() {
     <PublicLayout>
             <section className="min-h-screen py-24 text-white bg-slate-900">
                 <div className="w-9/12 mx-auto space-y-5">
-                    <h1 className="text-4xl font-futura">Layanan</h1>
+                    <h1 className="text-4xl font-futura">Gaya Rambut</h1>
                     <div className="flex flex-col flex-wrap items-center justify-center gap-4 sm:flex-row">
                         <div className="max-w-sm overflow-hidden text-center hover:bg-purple rounded-2xl bg-lime text-slate-900 hover:text-white">
                             <img src={buzz} className="object-cover object-center w-[360px] h-[250px]" />
