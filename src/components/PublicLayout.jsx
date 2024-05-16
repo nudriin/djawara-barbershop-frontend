@@ -33,6 +33,9 @@ export default function PublicLayout({ children }) {
                         <NavLink to="/service" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
                             <li className="px-3 py-1 hover:bg-lime hover:text-slate-900 hover:rounded-full">Service</li>
                         </NavLink>
+                        <NavLink to="/hair-model" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
+                            <li className="px-3 py-1 hover:bg-lime hover:text-slate-900 hover:rounded-full">Style</li>
+                        </NavLink>
                         <NavLink to="/pricelist" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
                             <li className="px-3 py-1 hover:bg-lime hover:text-slate-900 hover:rounded-full">Pricelist</li>
                         </NavLink>

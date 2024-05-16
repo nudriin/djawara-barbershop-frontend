@@ -28,6 +28,7 @@ import UserPrivateRoute from "./components/UserPrivateRoute";
 import UserOrder from "./pages/user/UserOrder";
 import UserReport from "./pages/user/UserReport";
 import KapsterPublic from "./pages/public/KapsterPublic";
+import HairModel from "./pages/public/HairModel";
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/register" element={<Register />} />
         <Route path="/kapster" element={<KapsterPublic />} />
+        <Route path="/hair-model" element={<HairModel />} />
 
 
         <Route element={<AdminSignRoute />}>
