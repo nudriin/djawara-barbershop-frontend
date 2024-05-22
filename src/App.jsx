@@ -29,6 +29,8 @@ import UserOrder from "./pages/user/UserOrder";
 import UserReport from "./pages/user/UserReport";
 import KapsterPublic from "./pages/public/KapsterPublic";
 import HairModel from "./pages/public/HairModel";
+import Admin from "./pages/admin/Admin";
+import AdminAdd from "./pages/admin/AdminAdd";
 
 export default function App() {
   return (
@@ -64,6 +66,8 @@ export default function App() {
           <Route path="/admins/profiles" element={<Profile />} />
           <Route path="/admins/passwords" element={<Password />} />
           <Route path="/admins/reports" element={<Report />} />
+          <Route path="/admins/admin" element={<Admin />} />
+          <Route path="/admins/admin/add" element={<AdminAdd />} />
         </Route>
 
         <Route element={<UserPrivateRoute />}>

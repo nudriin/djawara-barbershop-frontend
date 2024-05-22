@@ -28,7 +28,7 @@ export default function AdminSidebar() {
     }
 
     return (
-        <div className="flex flex-col justify-between text-white gap-14">
+        <div className="flex flex-col justify-between gap-8 text-white">
             <NavLink to="/">
                 <h1 className="w-9/12 px-2 mx-auto mt-4 text-3xl text-center text-slate-900 bg-lime -skew-y-2 font-futura">Djawara</h1>
             </NavLink>
@@ -54,6 +54,9 @@ export default function AdminSidebar() {
                     </NavLink>
                     <NavLink to="/admins/reports" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
                         <li className="px-4 py-2 font-bold font-rubik hover:bg-lime hover:text-slate-900 hover:rounded-full">Laporan</li>
+                    </NavLink>
+                    <NavLink to="/admins/admin" className={({ isActive }) => isActive ? activeLink : nonActiveLink}>
+                        <li className="px-4 py-2 font-bold font-rubik hover:bg-lime hover:text-slate-900 hover:rounded-full">Admin</li>
                     </NavLink>
                 </ul>
             </div>
